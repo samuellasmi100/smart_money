@@ -10,12 +10,8 @@ const checkAuthorizationMiddleware = require("./middleware/checkAuthorization");
 const RabbitConnectionManager = require("./message_stream/RabbitMQConnectionManager");
 const init_rabbit_queues = require("./utils/rabbitmq/init");
 
-
-
 server.use(cors());
 server.use(express.json());
-
-
 
 server.use("/users", usersController);
 server.use(checkAuthorizationMiddleware.checkAuthorization);
@@ -30,5 +26,5 @@ const launchServer = async () => {
     server.listen(process.env.REST_API_PORT, () =>
       console.log(`The Main Server is running on ${process.env.REST_API_PORT}`)
     );
-  };
+};
   launchServer();

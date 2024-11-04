@@ -1,6 +1,4 @@
 const amqp = require("amqplib");
-const path = require("path");
-const fs = require("fs/promises");
 
 let _rabbitConnections = {};
 let _connectionsListeners = {};
@@ -40,7 +38,6 @@ const addNewConnection = async (RABBIT_MQ_INSTANCE_NAME) => {
     });
 
     const channel = await connection.createChannel();
-
     _rabbitConnections[RABBIT_MQ_INSTANCE_NAME] = channel;
     console.log(
       `Connection to Rabbit instance: ${RABBIT_MQ_INSTANCE_NAME} created successfully`
@@ -129,6 +126,7 @@ const pushMessageToQueue = async (instanceName, queueName, message) => {
     console.log(error);
   }
 };
+
 
 module.exports = {
   addNewConnection,

@@ -5,11 +5,13 @@ const RABBIT_MQ_INSTANCE_NAME = process.env.RABBIT_MQ_INSTANCE_NAME
 const POOL_REQ = {}
 
 const addRequest = (req_id, data) => {
+  console.log(req_id,"req_id")
   POOL_REQ[req_id] = data
   return
 }
 
 const getAndDeleteRequestById = (id) => {
+  console.log(id,"id")
   const copyObject = POOL_REQ[id]
   delete POOL_REQ[id]
   return copyObject
@@ -31,15 +33,13 @@ const initQueue = async () => {
  }
  
 const returnMessageToClient = async (msg) => {
-  
-  
   const result = getAndDeleteRequestById(msg.id);
-  if (result && result.res) {
-    const { res } = result;
-    if (res && msg.error === true) {
-      res.status(msg.code).send(msg.data);
-    } else if (res && msg.error === false) {
-      res.status(msg.code).send(msg.data);
+  if (result && result.response) {
+    const { response } = result;
+    if (response && msg.error === true) {
+      response.status(msg.code).send(msg.data);
+    } else if (response && msg.error === false) {
+      response.status(msg.code).send(msg.data);
     }
   }
 }
