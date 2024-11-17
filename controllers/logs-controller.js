@@ -7,9 +7,22 @@ router.post("/", async (request, response, next) => {
   userLog.userId = userId;
 
   try {
-    await logsLogic.createUserLog(userLog);
-    let activities = await logsLogic.getActivities(userId);
-    response.json(activities);
+    const req_id = uuid();
+
+    const poolData = {
+      response
+    }
+ 
+    logsQueue.addRequest(req_id,poolData)
+  
+    const messageToQueue = {
+      type:"createLog",
+      id: req_id,
+      data:{
+        userLog
+      }
+    }
+    logsQueue.sendMessageToQueue(messageToQueue)
   } catch (error) {
     return next(error);
   }
@@ -17,9 +30,22 @@ router.post("/", async (request, response, next) => {
 
 router.get("/", async (request, response, next) => {
   try {
-    let userId = request.userId;
-    let activities = await logsLogic.getActivities(userId);
-    response.send(activities);
+    const req_id = uuid();
+
+    const poolData = {
+      response
+    }
+ 
+    logsQueue.addRequest(req_id,poolData)
+  
+    const messageToQueue = {
+      type:"getLogs",
+      id: req_id,
+      data:{
+        userLogs
+      }
+    }
+    logsQueue.sendMessageToQueue(messageToQueue)
   } catch (error) {
     return next(error);
   }
