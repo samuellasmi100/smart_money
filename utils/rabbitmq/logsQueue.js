@@ -1,6 +1,6 @@
 const RabbitMQConnectionManager = require("../../message_stream/RabbitMQConnectionManager")
-const AUTH_SERVER = process.env.AUTH_SERVER
-const SERVER_AUTH = process.env.SERVER_AUTH
+const LOGS_SERVER = process.env.LOGS_SERVER
+const SERVER_LOGS = process.env.SERVER_LOGS
 const RABBIT_MQ_INSTANCE_NAME = process.env.RABBIT_MQ_INSTANCE_NAME
 const POOL_REQ = {}
 
@@ -24,7 +24,7 @@ const initQueue = async () => {
           returnMessageToClient(data)
           return
         }
-        RabbitMQConnectionManager.listenToQueueMessages(RABBIT_MQ_INSTANCE_NAME,AUTH_SERVER,handleMessageFromQueue)
+        RabbitMQConnectionManager.listenToQueueMessages(RABBIT_MQ_INSTANCE_NAME,LOGS_SERVER,handleMessageFromQueue)
     } catch (error) {
     
       console.log(`failed to init api_key queue, error: ${error}`)
@@ -45,7 +45,7 @@ const returnMessageToClient = async (msg) => {
 
  const sendMessageToQueue = async (data) => {
     try {
-        RabbitMQConnectionManager.pushMessageToQueue(RABBIT_MQ_INSTANCE_NAME,SERVER_AUTH, JSON.stringify(data))
+        RabbitMQConnectionManager.pushMessageToQueue(RABBIT_MQ_INSTANCE_NAME,SERVER_LOGS, JSON.stringify(data))
     } catch (error) {
       console.log(`failed to init api_key queue, error: ${error}`)
 
