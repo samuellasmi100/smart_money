@@ -1,5 +1,6 @@
 const router = require("express").Router();
-let logsLogic = require("../logic/logs-logic");
+const logsQueue = require("../utils/rabbitmq/logsQueue")
+const uuid = require("uuid").v4;
 
 router.post("/", async (request, response, next) => {
   const userId = request.userId;
@@ -29,6 +30,8 @@ router.post("/", async (request, response, next) => {
 });
 
 router.get("/", async (request, response, next) => {
+
+  const userId = request.userId
   try {
     const req_id = uuid();
 
@@ -42,7 +45,7 @@ router.get("/", async (request, response, next) => {
       type:"getLogs",
       id: req_id,
       data:{
-        userLogs
+        userId
       }
     }
     logsQueue.sendMessageToQueue(messageToQueue)
